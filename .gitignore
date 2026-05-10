@@ -61,3 +61,24 @@ build_log*.txt
 .roo/
 .aider/
 .aider.*
+# Added by code-review-graph
+.code-review-graph/
+.cursorrules 
+.windsurfrules
+CLAUDE.md
+QODER.md
+.kiro/
+.github/
+.claude/
+.gemini/
+.codex/
+.git/
+.claude/
+.qoder/
+.cursor/
+.opencode/
+.vscode/
+.mcp*
+.opencode*
+AGENTS.md
+GEMINI.md
