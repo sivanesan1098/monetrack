@@ -12,8 +12,11 @@ class TransactionListScreen extends ConsumerWidget {
     final transactionsAsync = ref.watch(transactionListControllerProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const Text('Transactions'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: transactionsAsync.when(
         data: (transactions) {

@@ -27,6 +27,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
           NavigationDestination(label: 'Home', icon: Icon(Icons.home)),
           NavigationDestination(label: 'Transactions', icon: Icon(Icons.list)),
           NavigationDestination(label: 'Reports', icon: Icon(Icons.bar_chart)),
+          NavigationDestination(label: 'AI Chat', icon: Icon(Icons.chat_bubble_outline)),
           NavigationDestination(label: 'Settings', icon: Icon(Icons.settings)),
         ],
       ),

@@ -1,21 +1,131 @@
 {
   "rules": [
     {
-      "id": "generic_bank_sms",
+      "id": "standard_chartered_sms",
       "priority": 1,
-      "amount_regex": "(?:(?:₹|INR|Rs\\.?|\\$)\\s?)?([0-9]{1,3}(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?|[0-9]+(?:\\.[0-9]{1,2})?)",
-      "date_regex": "(\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}|\\d{1,2}-\\d{1,2}-\\d{2,4})",
-      "payee_regex": "(?:to|at|from)\\s+([A-Za-z0-9\\s\\.]+?)(?:\\s+(?:on|using|via|ref|bal|txn)|$|\\.)",
-      "keywords_spent": ["debited", "paid", "sent", "purchase", "spent", "withdrawn"],
-      "keywords_received": ["credited", "received", "refund", "deposited", "added"]
+      "amount_regex": "(?:debited\\s+for\\s+)(?:Rs\\.?|Rs|INR|₹)\\s?([0-9,]+(?:\\.[0-9]{1,2})?)",
+      "date_regex": "(\\d{1,2}[-./a-zA-Z]+[-./]\\d{2,4})",
+      "payee_regex": "(?:credited\\s+to\\s+)(?:a\\/c\\s+)?([^\\.]{1,50}?)(?:\\s*\\(|\\.|API|Ref)",
+      "keywords_spent": [
+        "debited"
+      ],
+      "keywords_received": []
+    },
+    {
+      "id": "hdfc_bank_sms",
+      "priority": 2,
+      "amount_regex": "(?:(?:Rs\\.?|Rs|INR|₹)\\s?)([0-9,]+(?:\\.[0-9]{1,2})?)",
+      "date_regex": "(\\d{1,2}[-./a-zA-Z]+[-./]\\d{2,4})",
+      "payee_regex": "(?:Info:|to VPA|to)\\s+([^\\.]{1,50}?)(?:\\s+(?:on|txn|Ref|Avl|Not you)|\\.|\\(|\\s*$)",
+      "keywords_spent": [
+        "debited",
+        "spent"
+      ],
+      "keywords_received": [
+        "credited",
+        "received"
+      ]
+    },
+    {
+      "id": "sbi_bank_sms",
+      "priority": 3,
+      "amount_regex": "(?:(?:Rs\\.?|Rs|INR|₹)\\s?)([0-9,]+(?:\\.[0-9]{1,2})?)",
+      "date_regex": "(\\d{1,2}[-./a-zA-Z]+[-./]\\d{2,4})",
+      "payee_regex": "(?:trf to|to)\\s+([^\\.]{1,50}?)(?:\\s+(?:on|txn|Ref|Avl)|\\.|\\s*$)",
+      "keywords_spent": [
+        "debited",
+        "withdrawn"
+      ],
+      "keywords_received": [
+        "credited",
+        "deposited"
+      ]
+    },
+    {
+      "id": "icici_bank_sms",
+      "priority": 4,
+      "amount_regex": "(?:(?:Rs\\.?|Rs|INR|₹)\\s?)([0-9,]+(?:\\.[0-9]{1,2})?)",
+      "date_regex": "(\\d{1,2}[-./a-zA-Z]+[-./]\\d{2,4})",
+      "payee_regex": "(?:from|Info:)\\s+([^\\.]{1,50}?)(?:\\s+(?:on|txn|Ref|Avl|Inv)|\\.|\\s*$)",
+      "keywords_spent": [
+        "debited",
+        "spent"
+      ],
+      "keywords_received": [
+        "credited",
+        "received"
+      ]
+    },
+    {
+      "id": "indian_bank_sms_generic",
+      "priority": 5,
+      "amount_regex": "(?:(?:Rs\\.?|Rs|INR|₹)\\s?)([0-9,]+(?:\\.[0-9]{1,2})?)",
+      "date_regex": "(\\d{1,2}[-./a-zA-Z]+[-./]\\d{2,4})",
+      "payee_regex": "(?:at|to|from|Info:)\\s+([^\\.]{1,50}?)(?:\\s+(?:on|txn|Ref|Avl|Inv)|\\.|\\s*$)",
+      "keywords_spent": [
+        "debited",
+        "spent",
+        "paid",
+        "sent",
+        "withdrawn",
+        "purchase"
+      ],
+      "keywords_received": [
+        "credited",
+        "received",
+        "deposited",
+        "added",
+        "refund"
+      ]
     },
     {
       "id": "upi_transaction",
-      "priority": 2,
-      "amount_regex": "(?:Paid|Sent)\\s+(?:(?:₹|INR|Rs\\.?)\\s?)?([0-9,.]+)",
-      "payee_regex": "(?:to)\\s+([A-Za-z0-9\\s]+?)(?:\\s+on|\\.|API|Ref)",
-      "keywords_spent": ["paid", "sent"],
+      "priority": 6,
+      "amount_regex": "(?:Paid|Sent)\\s+(?:(?:₹|INR|Rs\\.?|Rs)\\s?)?([0-9,.]+)",
+      "payee_regex": "(?:to)\\s+([^\\.]{1,50}?)(?:\\s+on|\\.|API|Ref)",
+      "keywords_spent": [
+        "paid",
+        "sent"
+      ],
       "keywords_received": []
+    },
+    {
+      "id": "generic_fallback",
+      "priority": 7,
+      "amount_regex": "(?:(?:₹|INR|Rs\\.?|Rs|\\$)\\s?)?([0-9]{1,3}(?:,[0-9]{3})*(?:\\.[0-9]{1,2})?|[0-9]+(?:\\.[0-9]{1,2})?)",
+      "date_regex": "(\\d{1,2}[-./a-zA-Z]+[-./]\\d{2,4})",
+      "payee_regex": "(?:to|at|from)\\s+([^\\.]{1,50}?)(?:\\s+(?:on|using|via|ref|bal|txn)|\\.|\\s*$)",
+      "keywords_spent": [
+        "debited",
+        "paid",
+        "sent",
+        "purchase",
+        "spent",
+        "withdrawn"
+      ],
+      "keywords_received": [
+        "credited",
+        "received",
+        "refund",
+        "deposited",
+        "added"
+      ]
     }
+  ],
+  "spam_keywords": [
+    "offer",
+    "discount",
+    "apply now",
+    "loan",
+    "insurance",
+    "congrats",
+    "winner",
+    "lucky",
+    "click here",
+    "http",
+    "www",
+    "otp",
+    "verification code",
+    "login"
   ]
 }

@@ -59,5 +59,21 @@ final transactionRepositoryProvider = Provider<TransactionRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef TransactionRepositoryRef = ProviderRef<TransactionRepository>;
+String _$smsServiceHash() => r'8171895df7133f70eb06a235bd7c830b1e4956bd';
+
+/// See also [smsService].
+@ProviderFor(smsService)
+final smsServiceProvider = AutoDisposeProvider<SmsService>.internal(
+  smsService,
+  name: r'smsServiceProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$smsServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SmsServiceRef = AutoDisposeProviderRef<SmsService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

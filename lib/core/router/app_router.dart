@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:monetrack/presentation/screens/home_screen.dart';
 import 'package:monetrack/presentation/screens/transaction_list_screen.dart';
 import 'package:monetrack/presentation/screens/reports_screen.dart';
+import 'package:monetrack/presentation/screens/ai_chat_screen.dart';
 import 'package:monetrack/presentation/screens/add_edit_transaction_screen.dart';
 import 'package:monetrack/presentation/screens/settings_screen.dart';
 import 'package:monetrack/presentation/screens/placeholders.dart';
@@ -46,6 +47,14 @@ GoRouter goRouter(GoRouterRef ref) {
               GoRoute(
                 path: '/reports',
                 builder: (context, state) => const ReportsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/ai-chat',
+                builder: (context, state) => const AiChatScreen(),
               ),
             ],
           ),

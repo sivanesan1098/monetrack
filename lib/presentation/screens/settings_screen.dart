@@ -6,6 +6,8 @@ import 'package:monetrack/presentation/providers/settings_controller.dart';
 import 'package:monetrack/presentation/providers/transaction_list_controller.dart';
 import 'package:monetrack/presentation/providers/reports_controller.dart';
 import 'package:monetrack/core/services/auto_import_service.dart';
+import 'package:monetrack/domain/entities/transaction.dart';
+import 'package:monetrack/presentation/screens/sms_import_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -94,6 +96,12 @@ class SettingsScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.history, color: Colors.blue),
+                title: const Text('Import Past Transactions'),
+                subtitle: const Text('Scan SMS inbox for transactions'),
+                onTap: () => _importPastTransactions(context, ref),
+              ),
+              ListTile(
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
                 title: const Text('Delete All Data', style: TextStyle(color: Colors.red)),
                 onTap: () => _showDeleteConfirmDialog(context, ref),
@@ -179,6 +187,13 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _importPastTransactions(BuildContext context, WidgetRef ref) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SmsImportScreen()),
     );
   }
 

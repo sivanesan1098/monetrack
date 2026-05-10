@@ -8,16 +8,19 @@ import 'package:monetrack/presentation/providers/transaction_list_controller.dar
 import 'package:monetrack/presentation/providers/reports_controller.dart';
 import 'package:uuid/uuid.dart';
 
+// Global instance initialized in main
+late AutoImportService globalAutoImportService;
+
 final autoImportServiceProvider = Provider<AutoImportService>((ref) {
-  return AutoImportService(ref);
+  return globalAutoImportService;
 });
 
 class AutoImportService {
   static const platform = MethodChannel('com.monetrack.monetrack/auto_import');
-  final Ref _ref;
+  final ProviderContainer _container;
   final MessageParser _parser = MessageParser();
 
-  AutoImportService(this._ref) {
+  AutoImportService(this._container) {
     _init();
   }
 
@@ -55,7 +58,7 @@ class AutoImportService {
     if (text == null) return;
 
     // Check if auto-add is enabled
-    final settings = await _ref.read(settingsControllerProvider.future);
+    final settings = await _container.read(settingsControllerProvider.future);
     if (settings['autoAdd'] != true) return;
 
     // Parse message
@@ -64,7 +67,7 @@ class AutoImportService {
     if (transaction != null) {
       // Add transaction using repository directly
       try {
-        final repository = _ref.read(transactionRepositoryProvider);
+        final repository = _container.read(transactionRepositoryProvider);
         final newTransaction = TransactionEntity(
           id: const Uuid().v4(),
           amount: transaction.amount,
@@ -85,8 +88,8 @@ class AutoImportService {
           (_) {
             print('Auto-imported transaction: ${transaction.amount} to ${transaction.payee}');
             // Invalidate providers to refresh UI
-            _ref.invalidate(transactionListControllerProvider);
-            _ref.invalidate(reportsControllerProvider);
+            _container.invalidate(transactionListControllerProvider);
+            _container.invalidate(reportsControllerProvider);
           },
         );
       } catch (e) {

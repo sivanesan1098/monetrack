@@ -3,11 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monetrack/core/router/app_router.dart';
 import 'package:monetrack/core/theme/app_theme.dart';
 import 'package:monetrack/presentation/providers/settings_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monetrack/core/services/auto_import_service.dart';
+import 'package:monetrack/core/services/background_service.dart'; // Assuming initializeBackgroundService is here or globally available
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MonetrackApp()));
+  await initializeBackgroundService();
+  final container = ProviderContainer();
+  globalAutoImportService = AutoImportService(container); 
+  runApp(UncontrolledProviderScope(container: container, child: const MonetrackApp()));
 }
 
 class MonetrackApp extends ConsumerWidget {

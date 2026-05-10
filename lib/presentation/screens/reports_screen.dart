@@ -87,7 +87,16 @@ class _ReportTabState extends ConsumerState<_ReportTab> {
     }
 
     if (_reportItems == null || _reportItems!.isEmpty) {
-      return const Center(child: Text('No data available'));
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.pie_chart_outline, size: 64, color: Colors.grey.withOpacity(0.5)),
+            const SizedBox(height: 16),
+            const Text('No data for selected period', style: TextStyle(color: Colors.grey)),
+          ],
+        ),
+      );
     }
 
     final List<PieChartSectionData> sections = _reportItems!.map((item) {
@@ -95,37 +104,108 @@ class _ReportTabState extends ConsumerState<_ReportTab> {
         color: item.color,
         value: item.amount,
         title: '${item.amount.toStringAsFixed(0)}',
-        radius: 100,
-        titleStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+        radius: 80,
+        titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+        badgeWidget: _Badge(item.iconData ?? Icons.category, size: 30, borderColor: item.color),
+        badgePositionPercentageOffset: .98,
       );
     }).toList();
 
     return Column(
       children: [
-        const SizedBox(height: 20),
-        Expanded(
+        const SizedBox(height: 32),
+        SizedBox(
+          height: 250,
           child: PieChart(
             PieChartData(
               sections: sections,
-              centerSpaceRadius: 40,
-              sectionsSpace: 2,
+              centerSpaceRadius: 60,
+              sectionsSpace: 4,
+              borderData: FlBorderData(show: false),
             ),
           ),
         ),
+        const SizedBox(height: 20),
         Expanded(
-          child: ListView.builder(
-            itemCount: _reportItems!.length,
-            itemBuilder: (context, index) {
-              final item = _reportItems![index];
-              return ListTile(
-                leading: CircleAvatar(backgroundColor: item.color, radius: 10),
-                title: Text(item.categoryName),
-                trailing: Text('₹ ${item.amount.toStringAsFixed(2)}'),
-              );
-            },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                ),
+              ],
+            ),
+            child: ListView.separated(
+              padding: const EdgeInsets.all(20),
+              itemCount: _reportItems!.length,
+              separatorBuilder: (context, index) => const Divider(height: 1, indent: 60),
+              itemBuilder: (context, index) {
+                final item = _reportItems![index];
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: item.color.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(item.iconData ?? Icons.category, color: item.color, size: 20),
+                  ),
+                  title: Text(item.categoryName, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  trailing: Text(
+                    '₹ ${item.amount.toStringAsFixed(0)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: item.color,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge(this.iconData, {required this.size, required this.borderColor});
+
+  final IconData iconData;
+  final double size;
+  final Color borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: PieChart.defaultDuration,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        shape: BoxShape.circle,
+        border: Border.all(color: borderColor, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(2, 2),
+            blurRadius: 4,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(size * .15),
+      child: Center(
+        child: Icon(iconData, size: size * .6, color: borderColor),
+      ),
     );
   }
 }

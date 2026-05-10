@@ -49,3 +49,15 @@ build_log*.txt
 
 # Agent directory
 .agent/
+
+# AI agent configs
+.opencode/
+.claude/
+.claude.json
+.kilo/
+.openclaude/
+.cline/
+.cursor/
+.roo/
+.aider/
+.aider.*
